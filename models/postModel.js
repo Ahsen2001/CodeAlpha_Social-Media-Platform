@@ -14,7 +14,9 @@ const postModel = {
         // Fetch posts from followed users OR the user themselves
         const query = `
             SELECT p.id, p.content, p.media_url, p.created_at, 
-                   u.id AS author_id, u.username AS author_username, u.avatar_url AS author_avatar
+                   u.id AS author_id, u.username AS author_username, u.avatar_url AS author_avatar,
+                   (SELECT COUNT(*) FROM likes WHERE post_id = p.id) AS likes_count,
+                   (SELECT COUNT(*) FROM comments WHERE post_id = p.id) AS comments_count
             FROM posts p
             JOIN users u ON p.user_id = u.id
             WHERE p.user_id = ? OR p.user_id IN (SELECT followed_id FROM followers WHERE follower_id = ?)
@@ -29,7 +31,9 @@ const postModel = {
         // Fetch all posts globally
         const query = `
             SELECT p.id, p.content, p.media_url, p.created_at, 
-                   u.id AS author_id, u.username AS author_username, u.avatar_url AS author_avatar
+                   u.id AS author_id, u.username AS author_username, u.avatar_url AS author_avatar,
+                   (SELECT COUNT(*) FROM likes WHERE post_id = p.id) AS likes_count,
+                   (SELECT COUNT(*) FROM comments WHERE post_id = p.id) AS comments_count
             FROM posts p
             JOIN users u ON p.user_id = u.id
             ORDER BY p.created_at DESC
@@ -42,7 +46,9 @@ const postModel = {
     async getPostById(postId) {
         const query = `
             SELECT p.id, p.content, p.media_url, p.created_at, p.updated_at,
-                   u.id AS author_id, u.username AS author_username, u.avatar_url AS author_avatar
+                   u.id AS author_id, u.username AS author_username, u.avatar_url AS author_avatar,
+                   (SELECT COUNT(*) FROM likes WHERE post_id = p.id) AS likes_count,
+                   (SELECT COUNT(*) FROM comments WHERE post_id = p.id) AS comments_count
             FROM posts p
             JOIN users u ON p.user_id = u.id
             WHERE p.id = ? 
