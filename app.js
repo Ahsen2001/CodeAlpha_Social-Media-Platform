@@ -22,6 +22,9 @@ app.use(morgan('dev'));
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Serve uploaded files (profile pictures, post images)
+app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+
 // API Routes
 app.use('/api', routes);
 

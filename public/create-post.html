@@ -80,23 +80,51 @@
         <hr class="divider">
 
         <div class="form-group">
-          <label class="form-label" for="mediaUrl">
-            <i class="bi bi-image"></i> Image URL <span style="color:var(--text-muted);text-transform:none;font-weight:400">(optional)</span>
+          <label class="form-label">
+            <i class="bi bi-image"></i> Add Image
+            <span style="color:var(--text-muted);text-transform:none;font-weight:400">(optional)</span>
           </label>
-          <input
-            type="url"
-            id="mediaUrl"
-            class="form-control"
-            placeholder="https://example.com/image.jpg"
-          >
-          <!-- Media Preview -->
-          <div id="mediaPreview" class="media-preview">
-            <img id="previewImg" src="" alt="Media preview">
-            <button type="button" id="removeMedia" class="media-preview-remove">
-              <i class="bi bi-x"></i>
+
+          <!-- Mode Tabs -->
+          <div style="display:flex;gap:0.5rem;margin-bottom:0.75rem">
+            <button type="button" id="tabUpload" class="btn btn-primary btn-sm">
+              <i class="bi bi-upload"></i> Upload File
+            </button>
+            <button type="button" id="tabUrl" class="btn btn-secondary btn-sm">
+              <i class="bi bi-link-45deg"></i> Use URL
             </button>
           </div>
+
+          <!-- File Upload Zone -->
+          <div id="fileUploadZone">
+            <label for="imageFile" class="upload-dropzone" id="dropzone">
+              <i class="bi bi-cloud-arrow-up upload-icon"></i>
+              <p class="upload-hint">Click to select or drag &amp; drop an image</p>
+              <p class="upload-hint-sub">JPEG, PNG, GIF or WEBP · Max 5MB</p>
+              <input type="file" id="imageFile" accept="image/jpeg,image/png,image/gif,image/webp"
+                     style="display:none">
+            </label>
+            <div id="uploadProgress" style="display:none;margin-top:0.75rem">
+              <div class="upload-progress-bar"><div id="uploadProgressFill"></div></div>
+              <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.4rem" id="uploadProgressText">Uploading...</p>
+            </div>
+          </div>
+
+          <!-- URL Input Zone -->
+          <div id="urlUploadZone" style="display:none">
+            <input type="url" id="mediaUrl" class="form-control"
+                   placeholder="https://example.com/image.jpg">
+          </div>
+
+          <!-- Shared Preview -->
+          <div id="mediaPreview" class="media-preview">
+            <img id="previewImg" src="" alt="Media preview">
+            <button type="button" id="removeMedia" class="media-preview-remove"
+                    title="Remove image"><i class="bi bi-x"></i></button>
+          </div>
+          <input type="hidden" id="resolvedMediaUrl">
         </div>
+
 
         <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem">
           <a href="/feed.html" class="btn btn-secondary">Cancel</a>

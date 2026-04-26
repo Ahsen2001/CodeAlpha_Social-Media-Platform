@@ -7,6 +7,7 @@ const postRoutes = require('./postRoutes');
 const commentRoutes = require('./commentRoutes');
 const likeRoutes = require('./likeRoutes');
 const followRoutes = require('./followRoutes');
+const uploadRoutes = require('./uploadRoutes');
 
 router.use('/auth', authRoutes);
 router.use('/users', userRoutes);
@@ -14,6 +15,7 @@ router.use('/posts', postRoutes);
 router.use('/comments', commentRoutes);
 router.use('/likes', likeRoutes);
 router.use('/follows', followRoutes);
+router.use('/upload', uploadRoutes);
 
 // Healthcheck Route
 router.get('/health', (req, res) => {
