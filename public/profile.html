@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus · Profile</title>
+  <meta name="description" content="View user profile on Nexus.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/feed.html" class="navbar-brand">⚡ Nexus</a>
+      <ul class="navbar-nav">
+        <li>
+          <a href="/feed.html" class="nav-link">
+            <i class="bi bi-house-door"></i>
+            <span>Home</span>
+          </a>
+        </li>
+        <li>
+          <a href="/create-post.html" class="nav-link">
+            <i class="bi bi-plus-square"></i>
+            <span>Post</span>
+          </a>
+        </li>
+        <li>
+          <a href="/profile.html" class="nav-link active">
+            <i class="bi bi-person-circle"></i>
+            <span>Profile</span>
+          </a>
+        </li>
+        <li>
+          <button id="logoutBtn" class="btn btn-ghost btn-sm">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="profileContent" class="profile-layout">
+
+    <!-- Profile Header Card -->
+    <div class="profile-header-card">
+      <div class="profile-cover"></div>
+      <div class="profile-avatar-wrap">
+        <div id="profileAvatar"></div>
+      </div>
+      <div id="profileDisplayName" class="profile-name mt-1"></div>
+      <div id="profileUsername" class="profile-username"></div>
+      <p id="profileBio" class="profile-bio"></p>
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div id="profilePostCount" class="profile-stat-number">0</div>
+          <div class="profile-stat-label">Posts</div>
+        </div>
+        <div class="profile-stat">
+          <div id="profileFollowers" class="profile-stat-number">0</div>
+          <div class="profile-stat-label">Followers</div>
+        </div>
+        <div class="profile-stat">
+          <div id="profileFollowing" class="profile-stat-number">0</div>
+          <div class="profile-stat-label">Following</div>
+        </div>
+      </div>
+      <div id="profileActionArea" class="profile-actions"></div>
+    </div>
+
+    <!-- Profile Tabs -->
+    <div class="profile-tabs">
+      <div class="profile-tab active">
+        <i class="bi bi-grid-3x3"></i> Posts
+      </div>
+    </div>
+
+    <!-- User Posts -->
+    <div id="profilePosts">
+      <div class="loading-state"><span class="spinner"></span> Loading posts...</div>
+    </div>
+
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/profile.js"></script>
+</body>
+</html>

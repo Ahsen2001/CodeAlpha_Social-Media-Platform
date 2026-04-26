@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus · Create Post</title>
+  <meta name="description" content="Share something new with your followers on Nexus.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/feed.html" class="navbar-brand">⚡ Nexus</a>
+      <ul class="navbar-nav">
+        <li>
+          <a href="/feed.html" class="nav-link">
+            <i class="bi bi-house-door"></i>
+            <span>Home</span>
+          </a>
+        </li>
+        <li>
+          <a href="/create-post.html" class="nav-link active">
+            <i class="bi bi-plus-square-fill"></i>
+            <span>Post</span>
+          </a>
+        </li>
+        <li>
+          <a href="/profile.html" class="nav-link">
+            <i class="bi bi-person-circle"></i>
+            <span>Profile</span>
+          </a>
+        </li>
+        <li>
+          <button id="logoutBtn" class="btn btn-ghost btn-sm">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="create-post-layout">
+
+    <div class="create-post-header">
+      <a href="/feed.html" class="btn btn-ghost btn-sm">
+        <i class="bi bi-arrow-left"></i> Back
+      </a>
+      <h1 style="font-size:1.2rem;font-weight:700">Create New Post</h1>
+    </div>
+
+    <div class="card">
+      <!-- Author Row -->
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem">
+        <div id="authorAvatar"></div>
+        <div>
+          <div id="authorName" style="font-weight:700;font-size:0.95rem"></div>
+          <div style="font-size:0.8rem;color:var(--text-muted)">Writing a new post</div>
+        </div>
+      </div>
+
+      <div id="postAlert" class="alert alert-danger"></div>
+
+      <form id="createPostForm">
+        <div class="form-group">
+          <label class="form-label" for="postContent">What's on your mind?</label>
+          <textarea
+            id="postContent"
+            class="form-control"
+            placeholder="Share your thoughts, ideas, or what's happening..."
+            maxlength="500"
+            rows="5"
+          ></textarea>
+          <div id="charCount" class="char-count">0 / 500</div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="form-group">
+          <label class="form-label" for="mediaUrl">
+            <i class="bi bi-image"></i> Image URL <span style="color:var(--text-muted);text-transform:none;font-weight:400">(optional)</span>
+          </label>
+          <input
+            type="url"
+            id="mediaUrl"
+            class="form-control"
+            placeholder="https://example.com/image.jpg"
+          >
+          <!-- Media Preview -->
+          <div id="mediaPreview" class="media-preview">
+            <img id="previewImg" src="" alt="Media preview">
+            <button type="button" id="removeMedia" class="media-preview-remove">
+              <i class="bi bi-x"></i>
+            </button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem">
+          <a href="/feed.html" class="btn btn-secondary">Cancel</a>
+          <button type="submit" id="submitPostBtn" class="btn btn-primary">
+            <i class="bi bi-send"></i> Publish Post
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tips Card -->
+    <div class="card mt-2" style="background:rgba(124,92,252,0.07);border-color:rgba(124,92,252,0.25)">
+      <div style="font-weight:600;font-size:0.9rem;color:var(--accent);margin-bottom:0.5rem">
+        <i class="bi bi-lightbulb"></i> Post Tips
+      </div>
+      <ul style="color:var(--text-secondary);font-size:0.85rem;padding-left:1.2rem;line-height:2">
+        <li>Posts can be text only, image only, or both.</li>
+        <li>Use a direct image URL ending in .jpg, .png, or .webp for best results.</li>
+        <li>Keep your posts authentic and respectful!</li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/create-post.js"></script>
+</body>
+</html>
