@@ -112,17 +112,38 @@ document.addEventListener('DOMContentLoaded', async () => {
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
     overlay.innerHTML = `
-      <div class="modal-box" style="max-width:460px">
-        <div class="modal-title">Edit Profile</div>
+      <div class="modal-box" style="max-width:480px">
+        <div class="modal-title">✏️ Edit Profile</div>
         <div id="editAlert" class="alert alert-danger"></div>
+
+        <!-- Avatar Upload -->
+        <div class="form-group">
+          <label class="form-label">Profile Picture</label>
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem">
+            <div id="editAvatarPreview">${avatarHTML(profileUser, 'avatar-lg')}</div>
+            <div style="flex:1">
+              <label for="avatarFileInput" class="btn btn-secondary btn-sm" style="cursor:pointer;margin-bottom:0.5rem">
+                <i class="bi bi-upload"></i> Upload Photo
+              </label>
+              <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/gif,image/webp" style="display:none">
+              <div id="avatarUploadProgress" style="display:none;margin-top:0.5rem">
+                <div class="upload-progress-bar"><div id="avatarProgressFill"></div></div>
+                <p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem" id="avatarProgressText">Uploading...</p>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:0.8rem;color:var(--text-muted)">Or paste a URL:</p>
+          <input type="url" id="editAvatar" class="form-control" style="margin-top:0.4rem"
+                 placeholder="https://example.com/avatar.jpg"
+                 value="${escapeHTML(profileUser.avatar_url || '')}">
+        </div>
+
         <div class="form-group">
           <label class="form-label">Bio</label>
-          <textarea id="editBio" class="form-control" rows="3" maxlength="200" placeholder="Tell people about yourself...">${escapeHTML(profileUser.bio || '')}</textarea>
+          <textarea id="editBio" class="form-control" rows="3" maxlength="200"
+                    placeholder="Tell people about yourself...">${escapeHTML(profileUser.bio || '')}</textarea>
         </div>
-        <div class="form-group">
-          <label class="form-label">Avatar URL</label>
-          <input type="url" id="editAvatar" class="form-control" placeholder="https://example.com/avatar.jpg" value="${escapeHTML(profileUser.avatar_url || '')}">
-        </div>
+
         <div class="modal-actions">
           <button id="editCancel" class="btn btn-secondary">Cancel</button>
           <button id="editSave" class="btn btn-primary"><i class="bi bi-check-lg"></i> Save Changes</button>
@@ -131,13 +152,90 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.body.appendChild(overlay);
     requestAnimationFrame(() => overlay.classList.add('modal-open'));
 
-    const close = () => { overlay.classList.remove('modal-open'); setTimeout(() => overlay.remove(), 250); };
+    const close = () => {
+      overlay.classList.remove('modal-open');
+      setTimeout(() => overlay.remove(), 250);
+    };
     overlay.querySelector('#editCancel').addEventListener('click', close);
     overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
 
+    // ---- Avatar file upload via XHR ----
+    let pendingAvatarUpload = false;
+    const avatarFileInput   = overlay.querySelector('#avatarFileInput');
+    const avatarPreview     = overlay.querySelector('#editAvatarPreview');
+    const avatarProgress    = overlay.querySelector('#avatarUploadProgress');
+    const avatarFill        = overlay.querySelector('#avatarProgressFill');
+    const avatarProgressTxt = overlay.querySelector('#avatarProgressText');
+    const editAvatarUrl     = overlay.querySelector('#editAvatar');
+
+    avatarFileInput.addEventListener('change', () => {
+      const file = avatarFileInput.files[0];
+      if (!file) return;
+
+      const ALLOWED = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (!ALLOWED.includes(file.type)) { toast('Invalid file type.', 'danger'); return; }
+      if (file.size > 5 * 1024 * 1024)  { toast('File too large. Max 5MB.', 'danger'); return; }
+
+      // Instant local preview
+      const localUrl = URL.createObjectURL(file);
+      avatarPreview.innerHTML = `<img src="${localUrl}" class="avatar avatar-lg">`;
+
+      avatarProgress.style.display = 'block';
+      avatarFill.style.width = '0%';
+      pendingAvatarUpload = true;
+
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/upload/avatar');
+      xhr.setRequestHeader('Authorization', `Bearer ${api.getToken()}`);
+
+      xhr.upload.addEventListener('progress', e => {
+        if (e.lengthComputable) {
+          const pct = Math.round((e.loaded / e.total) * 100);
+          avatarFill.style.width = `${pct}%`;
+          avatarProgressTxt.textContent = `Uploading... ${pct}%`;
+        }
+      });
+
+      xhr.addEventListener('load', () => {
+        URL.revokeObjectURL(localUrl);
+        avatarProgress.style.display = 'none';
+        pendingAvatarUpload = false;
+
+        let data;
+        try { data = JSON.parse(xhr.responseText); } catch (_) {}
+
+        if (xhr.status === 200 && data && data.success) {
+          editAvatarUrl.value = data.avatar_url;
+          avatarPreview.innerHTML = `<img src="${escapeHTML(data.avatar_url)}" class="avatar avatar-lg">`;
+          toast('Avatar uploaded! 🖼️', 'success');
+        } else {
+          avatarPreview.innerHTML = avatarHTML(profileUser, 'avatar-lg');
+          toast((data && data.message) || 'Avatar upload failed.', 'danger');
+        }
+      });
+
+      xhr.addEventListener('error', () => {
+        avatarProgress.style.display = 'none';
+        pendingAvatarUpload = false;
+        avatarPreview.innerHTML = avatarHTML(profileUser, 'avatar-lg');
+        toast('Network error during upload.', 'danger');
+      });
+
+      xhr.send(formData);
+    });
+
+    // ---- Save profile (bio + avatar_url) ----
     overlay.querySelector('#editSave').addEventListener('click', async () => {
+      if (pendingAvatarUpload) {
+        toast('Please wait for the avatar upload to finish.', 'warning');
+        return;
+      }
+
       const bio = overlay.querySelector('#editBio').value.trim();
-      const avatar_url = overlay.querySelector('#editAvatar').value.trim() || null;
+      const avatar_url = editAvatarUrl.value.trim() || null;
       const alertEl = overlay.querySelector('#editAlert');
       const saveBtn = overlay.querySelector('#editSave');
 
@@ -145,13 +243,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       btnLoading(saveBtn, 'Saving...');
       try {
         const data = await api.put('/users/profile', { bio, avatar_url });
-        // Update local session
-        const user = api.getUser();
-        api.setSession(api.getToken(), { ...user, avatar_url: data.profile.avatar_url });
-        // Refresh page data
+        const currentUser = api.getUser();
+        api.setSession(api.getToken(), { ...currentUser, avatar_url: data.profile.avatar_url });
         profileUser = data.profile;
         document.getElementById('profileAvatar').innerHTML = avatarHTML(data.profile, 'avatar-xl');
-        document.getElementById('profileBio').textContent = data.profile.bio || 'No bio yet.';
+        document.getElementById('profileBio').textContent  = data.profile.bio || 'No bio yet.';
         toast('Profile updated! ✨', 'success');
         close();
       } catch (err) {
@@ -160,6 +256,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
   }
+
 
   /* ===========================
      USER POSTS

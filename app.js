@@ -28,8 +28,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 // API Routes
 app.use('/api', routes);
 
-// Fallback: serve index.html for unknown routes (SPA support)
-app.get('*', (req, res) => {
+// Fallback: serve index.html for non-API, non-static routes (SPA support)
+// Uses app.use() instead of app.get('*') for compatibility with path-to-regexp v8+
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/')) return next();
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 

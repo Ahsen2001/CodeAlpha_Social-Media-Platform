@@ -819,3 +819,66 @@ body { animation: pageFadeIn 0.3s ease; }
    ============================================ */
 .alert { display: none; align-items: center; gap: 0.5rem; }
 .alert.show { display: flex; }
+
+/* ============================================
+   IMAGE UPLOAD – DROP ZONE & PROGRESS
+   ============================================ */
+.upload-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--transition);
+  background: var(--bg-secondary);
+  gap: 0.4rem;
+}
+.upload-dropzone:hover,
+.upload-dropzone.drag-over {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+.upload-icon {
+  font-size: 2rem;
+  color: var(--text-muted);
+  transition: color var(--transition);
+}
+.upload-dropzone:hover .upload-icon,
+.upload-dropzone.drag-over .upload-icon { color: var(--accent); }
+.upload-hint { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
+.upload-hint-sub { font-size: 0.78rem; color: var(--text-muted); }
+
+.upload-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-hover);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.upload-progress-bar > div {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), #c084fc);
+  border-radius: 100px;
+  transition: width 0.25s ease;
+}
+
+/* char counter */
+.char-count {
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+}
+.media-preview { position:relative;display:none;margin-top:1rem; }
+.media-preview img { width:100%;max-height:300px;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--border); }
+.media-preview-remove {
+  position:absolute;top:0.5rem;right:0.5rem;
+  background:rgba(0,0,0,0.7);border:none;border-radius:50%;
+  color:white;width:28px;height:28px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:0.9rem;
+}

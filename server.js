@@ -8,7 +8,7 @@ pool.getConnection()
     .then((connection) => {
         console.log('Database connected successfully.');
         connection.release();
-        
+
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
