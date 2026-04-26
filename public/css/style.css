@@ -675,3 +675,147 @@ textarea.form-control { resize: vertical; min-height: 100px; }
   .navbar-nav { gap: 0; }
   .nav-link span { display: none; }
 }
+
+/* ============================================
+   TOAST NOTIFICATIONS
+   ============================================ */
+#toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.6rem;
+  max-width: 360px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  pointer-events: auto;
+}
+.toast-close {
+  background: none; border: none; color: var(--text-muted);
+  cursor: pointer; margin-left: auto; font-size: 0.9rem; padding: 2px;
+  transition: color var(--transition);
+}
+.toast-close:hover { color: var(--text-primary); }
+
+.toast-success { border-left: 3px solid var(--success); }
+.toast-success i { color: var(--success); }
+.toast-danger  { border-left: 3px solid var(--danger); }
+.toast-danger i { color: var(--danger); }
+.toast-warning { border-left: 3px solid var(--warning); }
+.toast-warning i { color: var(--warning); }
+.toast-info    { border-left: 3px solid var(--accent); }
+.toast-info i  { color: var(--accent); }
+
+.toast-enter { opacity: 0; transform: translateX(100%); }
+.toast-show  { opacity: 1; transform: translateX(0); transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+.toast-exit  { opacity: 0; transform: translateX(100%); transition: all 0.25s ease; }
+
+@media (max-width: 480px) {
+  #toast-container { left: 1rem; right: 1rem; max-width: none; }
+}
+
+/* ============================================
+   MODAL / CONFIRM DIALOG
+   ============================================ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+  opacity: 0; transition: opacity 0.25s ease;
+}
+.modal-overlay.modal-open { opacity: 1; }
+.modal-overlay.modal-open .modal-box {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.modal-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  width: 100%; max-width: 380px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+  transform: translateY(20px) scale(0.97);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34,1.4,0.64,1);
+}
+.modal-title {
+  font-size: 1.1rem; font-weight: 700;
+  margin-bottom: 0.5rem; color: var(--text-primary);
+}
+.modal-body-text {
+  font-size: 0.9rem; color: var(--text-secondary);
+  margin-bottom: 1.5rem; line-height: 1.5;
+}
+.modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+
+/* ============================================
+   SKELETON LOADERS
+   ============================================ */
+@keyframes shimmer {
+  0% { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-hover) 25%,
+    rgba(255,255,255,0.04) 37%,
+    var(--bg-hover) 63%
+  );
+  background-size: 1200px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+
+.skeleton-card { pointer-events: none; user-select: none; }
+.skeleton-avatar-sm { width: 36px; height: 36px; border-radius: 50%; }
+.skeleton-text { height: 12px; border-radius: 100px; }
+.skeleton-card .post-content,
+.skeleton-card .post-header { pointer-events: none; }
+
+/* ============================================
+   PAGE TRANSITIONS
+   ============================================ */
+body { animation: pageFadeIn 0.3s ease; }
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   LIKE BUTTON HEART POP ANIMATION
+   ============================================ */
+@keyframes heartPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.4); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.action-btn.liked i { animation: heartPop 0.35s ease; }
+
+/* ============================================
+   ALERT ICON ALIGNMENT
+   ============================================ */
+.alert { display: none; align-items: center; gap: 0.5rem; }
+.alert.show { display: flex; }
