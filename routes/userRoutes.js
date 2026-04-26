@@ -14,9 +14,17 @@ router.get('/profile', protect, userController.getMyProfile);
 // Access: Protected
 router.put('/profile', protect, [
     body('avatar_url')
-        .optional()
-        .isURL({ require_tld: false, require_protocol: true })
-        .withMessage('avatar_url must be a valid complete URL')
+        .optional({ nullable: true, checkFalsy: true })
+        .custom((value) => {
+            if (!value) return true;
+            // Accept relative upload paths (from multer) OR full http/https URLs
+            const isRelativeUpload = /^\/uploads\/.+\.(jpg|jpeg|png|gif|webp)$/i.test(value);
+            const isFullUrl        = /^https?:\/\/.+/i.test(value);
+            if (!isRelativeUpload && !isFullUrl) {
+                throw new Error('avatar_url must be a valid URL or an uploaded file path');
+            }
+            return true;
+        })
 ], userController.updateProfile);
 
 // Route: GET /api/users/:username
