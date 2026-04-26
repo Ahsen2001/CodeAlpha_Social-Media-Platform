@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexus · Create Post</title>
-  <meta name="description" content="Share something new with your followers on Nexus.">
+  <meta name="description" content="Share something new with your followers on CodeAlpha.">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
 
   <!-- Navbar -->
   <nav class="navbar">
     <div class="navbar-inner">
-      <a href="/feed.html" class="navbar-brand">⚡ Nexus</a>
+      <a href="/feed.html" class="navbar-brand">CodeAlpha</a>
       <ul class="navbar-nav">
         <li>
           <a href="/feed.html" class="nav-link">
@@ -67,13 +69,8 @@
       <form id="createPostForm">
         <div class="form-group">
           <label class="form-label" for="postContent">What's on your mind?</label>
-          <textarea
-            id="postContent"
-            class="form-control"
-            placeholder="Share your thoughts, ideas, or what's happening..."
-            maxlength="500"
-            rows="5"
-          ></textarea>
+          <textarea id="postContent" class="form-control"
+            placeholder="Share your thoughts, ideas, or what's happening..." maxlength="500" rows="5"></textarea>
           <div id="charCount" class="char-count">0 / 500</div>
         </div>
 
@@ -101,26 +98,27 @@
               <i class="bi bi-cloud-arrow-up upload-icon"></i>
               <p class="upload-hint">Click to select or drag &amp; drop an image</p>
               <p class="upload-hint-sub">JPEG, PNG, GIF or WEBP · Max 5MB</p>
-              <input type="file" id="imageFile" accept="image/jpeg,image/png,image/gif,image/webp"
-                     style="display:none">
+              <input type="file" id="imageFile" accept="image/jpeg,image/png,image/gif,image/webp" style="display:none">
             </label>
             <div id="uploadProgress" style="display:none;margin-top:0.75rem">
-              <div class="upload-progress-bar"><div id="uploadProgressFill"></div></div>
-              <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.4rem" id="uploadProgressText">Uploading...</p>
+              <div class="upload-progress-bar">
+                <div id="uploadProgressFill"></div>
+              </div>
+              <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.4rem" id="uploadProgressText">
+                Uploading...</p>
             </div>
           </div>
 
           <!-- URL Input Zone -->
           <div id="urlUploadZone" style="display:none">
-            <input type="url" id="mediaUrl" class="form-control"
-                   placeholder="https://example.com/image.jpg">
+            <input type="url" id="mediaUrl" class="form-control" placeholder="https://example.com/image.jpg">
           </div>
 
           <!-- Shared Preview -->
           <div id="mediaPreview" class="media-preview">
             <img id="previewImg" src="" alt="Media preview">
-            <button type="button" id="removeMedia" class="media-preview-remove"
-                    title="Remove image"><i class="bi bi-x"></i></button>
+            <button type="button" id="removeMedia" class="media-preview-remove" title="Remove image"><i
+                class="bi bi-x"></i></button>
           </div>
           <input type="hidden" id="resolvedMediaUrl">
         </div>
@@ -151,4 +149,5 @@
   <script src="/js/api.js"></script>
   <script src="/js/create-post.js"></script>
 </body>
+
 </html>

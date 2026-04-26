@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function renderProfile(p) {
-    document.title = `@${p.username} · Nexus`;
+    document.title = `@${p.username} · CodeAlpha`;
 
     document.getElementById('profileAvatar').innerHTML = avatarHTML(p, 'avatar-xl');
     document.getElementById('profileDisplayName').textContent = p.username;
@@ -161,12 +161,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // ---- Avatar file upload via XHR ----
     let pendingAvatarUpload = false;
-    const avatarFileInput   = overlay.querySelector('#avatarFileInput');
-    const avatarPreview     = overlay.querySelector('#editAvatarPreview');
-    const avatarProgress    = overlay.querySelector('#avatarUploadProgress');
-    const avatarFill        = overlay.querySelector('#avatarProgressFill');
+    const avatarFileInput = overlay.querySelector('#avatarFileInput');
+    const avatarPreview = overlay.querySelector('#editAvatarPreview');
+    const avatarProgress = overlay.querySelector('#avatarUploadProgress');
+    const avatarFill = overlay.querySelector('#avatarProgressFill');
     const avatarProgressTxt = overlay.querySelector('#avatarProgressText');
-    const editAvatarUrl     = overlay.querySelector('#editAvatar');
+    const editAvatarUrl = overlay.querySelector('#editAvatar');
 
     avatarFileInput.addEventListener('change', () => {
       const file = avatarFileInput.files[0];
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const ALLOWED = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
       if (!ALLOWED.includes(file.type)) { toast('Invalid file type.', 'danger'); return; }
-      if (file.size > 5 * 1024 * 1024)  { toast('File too large. Max 5MB.', 'danger'); return; }
+      if (file.size > 5 * 1024 * 1024) { toast('File too large. Max 5MB.', 'danger'); return; }
 
       // Instant local preview
       const localUrl = URL.createObjectURL(file);
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         pendingAvatarUpload = false;
 
         let data;
-        try { data = JSON.parse(xhr.responseText); } catch (_) {}
+        try { data = JSON.parse(xhr.responseText); } catch (_) { }
 
         if (xhr.status === 200 && data && data.success) {
           editAvatarUrl.value = data.avatar_url;
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         api.setSession(api.getToken(), { ...currentUser, avatar_url: data.profile.avatar_url });
         profileUser = data.profile;
         document.getElementById('profileAvatar').innerHTML = avatarHTML(data.profile, 'avatar-xl');
-        document.getElementById('profileBio').textContent  = data.profile.bio || 'No bio yet.';
+        document.getElementById('profileBio').textContent = data.profile.bio || 'No bio yet.';
         toast('Profile updated! ✨', 'success');
         close();
       } catch (err) {
